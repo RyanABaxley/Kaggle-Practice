@@ -18,3 +18,21 @@ _fem = set(clean(mot) for mot in set(fem['Flexion'].tolist()))
 _masc_mots = list(_masc.difference(_fem))
 _fem_mots = list(_fem.difference(_masc))
 #still need to remove english imports
+
+char_list = list("abcdefghijklmnopqrstuvwxyz" #standard alphabet
+                 "àáâäæ" #various accent marks
+                 "ç" #...
+                 "èéêęë" #...
+                 "îï" #...
+                 "ôöœ" #...
+                 "ûüùú" #...
+                 "_") #unknown char
+
+characters = sorted(list(set(letter for word in _masc_mots + _fem_mots for letter in word)))
+c = [c for c in characters if c not in char_list]
+m = [mot for mot in _masc_mots if any(ch in mot for ch in c)]
+f = [mot for mot in _fem_mots if any(ch in mot for ch in c)]
+
+masc_mots = [mot for mot in _masc_mots if mot not in m]
+fem_mots = [mot for mot in _fem_mots if mot not in f]
+characters = sorted(list(set(letter for word in masc_mots + fem_mots for letter in word)))
