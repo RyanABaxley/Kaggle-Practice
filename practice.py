@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import random
-np.random.seed(17)
+np.random.seed(0)
 
 mots = pd.read_csv('mots.txt',sep='\t')
 
@@ -53,7 +53,7 @@ from sklearn.utils import shuffle
 from sklearn.metrics import confusion_matrix
 
 
-def prep_data(train_len = 2000, test_len = 100):
+def prep_data(train_len = 2500, test_len = 150):
     np.random.seed(17)
     if train_len + test_len > min([len(masc_mots),len(fem_mots)]):
         print('Warning: Overlap of training and testing sets!')
@@ -69,17 +69,17 @@ def prep_data(train_len = 2000, test_len = 100):
     return (X_train, y_train.flatten(), X_test, y_test.flatten())
 
 def model(data):
-    np.random.seed(17)
+    np.random.seed(0)
     X_train, y_train, X_test, y_test = data
 
-    clf = svm.SVC(gamma='scale',random_state=17,probability=True)
+    clf = svm.SVC(gamma='scale',random_state=0,probability=True)
     clf.fit(X_train, y_train)
     
     #print(clf.score(X_test,y_test))
     y_pred = clf.predict(X_test)
     print('Accuracy: %f%%' % (100 - 100*sum(abs(y_pred - y_test))/len(y_pred)))
     print('Confusion Matrix:\n',confusion_matrix(y_test, y_pred))
-    for i in random.sample(range(len(X_test)), 20):
+    for i in random.sample(range(len(X_test)), 10):
         word = word_decoder(X_test[i])
         print('Word:',word,
               ' '*(pad_len - len(word)),'Guess:',bin2gen(y_pred[i]),
@@ -90,7 +90,7 @@ def model(data):
 
 def run_model(trials,train_len=10000//2,test_len=1000):
     print('Train:',train_len,'\nTest:',test_len,'\n')
-    np.random.seed(17)
+    np.random.seed(0)
     data = prep_data(train_len,test_len)
     for trial in range(trials):
         clf, wrong = model(data)
